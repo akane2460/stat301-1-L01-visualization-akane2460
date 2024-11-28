@@ -1,0 +1,307 @@
+---
+title: "L01 Visualization"
+subtitle: "Data Science 1 with R (STAT 301-1)"
+author: "Allison Kane"
+format:
+  html:
+    toc: true
+    embed-resources: true
+    link-external-newwindow: true
+
+execute:
+  warning: false
+
+from: markdown+emoji 
+---
+
+::: {.callout-tip icon=false}
+
+## Github Repo Link
+
+[https://github.com/stat301-1-2023-fall/L01-visualization-akane2460.git](https://github.com/stat301-1-2023-fall/L01-visualization-akane2460.git)
+
+:::
+
+## Load packages
+
+```{r}
+#| label: load-pkgs
+#| message: false
+
+# Loading package(s)
+
+library(tidyverse)
+
+```
+
+
+## Datasets 
+
+This lab utilizes the `mpg` and `diamonds` datasets. Both come with `ggplot2`.
+
+```{r}
+#| label: load-data
+
+# read in data
+tinder_data <- read_csv("data/tinder_data.csv")
+
+```
+
+
+## Exercises
+
+### Exercise 1 
+
+There are 3 particularly important components to our template for building a graphic with `ggplot2`. They are `<DATA>`, `<GEOM_FUNCTION>`, and `<MAPPINGS>`. The importance of `<DATA>` is obvious. `<GEOM_FUNCTION>` is referring to the selection of a **geom**. `<MAPPINGS>`, specifically `aes(<MAPPINGS>)`, is referring to the process of defining **aesthetic mappings**.
+
+* What is a **geom**? 
+* What is an **aesthetic mapping**? 
+
+
+::: {.callout-tip icon="false"}
+## Solution
+
+What is a geom?
+A geom is the object a plot uses to represent data.
+What is an aesthetic mapping?
+An aesthetic maapping defines how variables in the dataset are mapped to visual properties. 
+
+:::
+
+### Exercise 2
+
+Construct a scatterplot of `hwy` versus `cty` using the `mpg` dataset. What is the problem with this plot? How could you improve it?
+
+::: {.callout-tip icon="false"}
+## Solution
+
+```{r}
+#| label: exercise 2
+
+# original 
+ggplot(data = mpg, aes(x = cty, y = hwy)) +
+  geom_point()
+# jittered graph
+ggplot(data = mpg, aes(x = cty, y = hwy)) +
+  geom_jitter()
+```
+OVERPLOTTING is the issue here, it can be fixed using geom_jitter
+
+:::
+
+### Exercise 3
+
+Construct a scatterplot of `hwy` versus `cty`. Set the color of the points to `drv`.
+
+Now construct a scatterplot of `hwy` versus `cty`. Set the color of the points to your favorite color (try typing `colors()` in the console) and `facet` by `drv`. Read `?facet_wrap` and adjust the `ncol` and `scales` as necessary.
+
+::: {.callout-tip icon="false"}
+## Solution
+
+```{r}
+#| label: exercise 3
+
+# build plot with facet_wrap based on "drv"
+ggplot(data = mpg, aes(x = cty, y = hwy, color = drv)) +
+  geom_point()
+
+# build plot with facet_wrap based on "drv"
+ggplot(data = mpg, aes(x = cty, y = hwy)) +
+  geom_point(color = "#573ec7") +
+  facet_wrap("drv", ncol = 1, scales = "fixed")
+
+```
+
+
+:::
+
+What are the advantages to using faceting instead of the color aesthetic? What are the disadvantages? How might the balance change if you had a larger dataset?
+
+::: {.callout-tip icon="false"}
+## Solution
+
+It is easier to discern the overall patterns of each. However it is difficult to discern how these overall trends relate to each other. If there was a larger dataset, there might be more groups that might make it difficult to visualize trends across so many individual plots.
+
+:::
+
+### Exercise 4
+
+Construct a scatterplot of `hwy` vs `cty`. Next, map a third numerical variable to `color`, then `size`, then `shape`. 
+
+::: {.callout-tip icon="false"}
+## Solution
+
+```{r}
+#| label: exercise 4
+
+# mapping engine displacement to color
+ggplot(data = mpg, aes(x = cty, y = hwy, color = displ)) +
+  geom_point()
+
+# mapping engine displacement to size
+ggplot(data = mpg, aes(x = cty, y = hwy, size = displ)) +
+  geom_point()
+
+# mapping type of transmission to shape
+ggplot(data = mpg, aes(x = cty, y = hwy, shape = trans)) +
+  geom_point()
+```
+
+:::
+
+How do the aesthetics behave differently for categorical versus numerical variables? In other words, which variable types (numeric/categorical) are appropriate to match to which aesthetics (size/shape/color)?
+
+::: {.callout-tip icon="false"}
+## Solution
+
+Different aesthetics are well-suited to different types of variables. Categorical variables align better with aesthetics like shape and color. Numeric variables are more appropriate to match aesthetics like size. 
+
+:::
+
+### Exercise 5
+
+Construct a histogram of the `carat` variable in the `diamonds` dataset. Adjust the `bins` to an appropriate value. Add a `title`, remove the axis label that says `count`, and add a `caption`: "Source: ggplot2 package".
+
+::: {.callout-tip icon="false"}
+## Solution
+
+```{r}
+#| label: exercise 5
+
+# histogram
+diamonds |>  
+  ggplot(aes(carat)) +
+    geom_histogram(bins = 60, color = "white") +
+    labs(
+      title = "Carat Distributions of 50,000 round cut Diamonds",
+      y = NULL,
+      x = "Carat",
+      caption = "Source: ggplot2 package"
+    )
+
+```
+
+
+:::
+
+### Exercise 6
+
+Construct 2 appropriate graphics to show the relationship between `carat` and `cut`. 
+
+::: {.callout-tip icon="false"}
+## Solution
+
+```{r}
+#| label: exercise 6
+
+# histogram
+ggplot(data = diamonds, aes(x = carat)) +
+  geom_histogram(stat = "bin", binwidth = .1) +
+  facet_wrap(~ cut) +
+  labs(
+    title = "Carat Distributions of Diamonds",
+    y = NULL,
+    x = "Carat",
+    caption = "Source: ggplot2 package"
+  )
+
+# boxplot
+ggplot(data = diamonds, aes(x = carat)) +
+  geom_boxplot() +
+  facet_wrap(~ cut) +
+  labs(
+    title = "Carat Distributions of Diamonds",
+    y = NULL,
+    x = "Carat",
+    caption = "Source: ggplot2 package"
+  )
+
+
+```
+Across most cuts of diamonds, the median carat remains slightly less than 1. Ideal diamonds, however, have a smaller median carat of approximately .5 carats. The distributions of carats are typically skewed to the right for most cuts. The carats of these diamonds ranges from 0.0 carats to approximately 4.0 carats. 
+
+:::
+
+### Exercise 7
+
+Construct a barplot of `cut`. Add in `aes(fill = carat > 0.7)`.
+
+
+::: {.callout-tip icon="false"}
+## Solution
+
+```{r}
+#| label: exercise 7
+
+# barplot
+ggplot(data = diamonds, aes(x = cut)) +
+  geom_bar(aes(fill = carat > .7)) +
+  labs(
+    title = "Proportion of Diamonds >.7 Carats for Different Cuts",
+    y = NULL,
+    x = "Cut",
+    caption = "Source: ggplot2 package"
+  )
+
+```
+
+
+:::
+
+### Exercise 8
+
+When would you use `facet_grid()` versus `facet_wrap()`? When using `facet_grid()` it is suggested that you put the variable with more unique levels in the columns. Why do you think that this practice is suggested?
+
+::: {.callout-tip icon="false"}
+## Solution
+
+facet_grid might be more useful in comparing across unique levels in the columns because it is easier to visualize differences across the individual distributions with 2 discrete variables in its organized matrix of panels. 
+
+:::
+
+
+## Case Study
+
+Congratulations, you just landed your first job as a data analyst for Tinder! The dataset is stored in the `data` folder called `tinder_data`. A codebook, `tinder_data_codebook.csv`, provides a description of each of the variable names. This has been read in for you at the top of the document. We will learn more about importing data later in the quarter.
+
+**Your first assignment is to determine if there is a relationship between messages sent and messages received and how this differs based on user gender.** Your boss has asked for a one paragraph summary with graphics to support your conclusions. Your boss wants all graphics *saved* into a folder named "plots". Hint: `ggsave()`.
+
+Since this is your first project as a data analyst you have been provided some tips and considerations for getting started:
+
+ - When approaching a research question it is important to use univariate, bivariate, and multivariate analysis (depending on the problem) to get a better understanding of your data and also identify any potential problems.
+ - How might the distribution of your variables impact your conclusions? Outliers? Weird values? Imbalanced classes?
+ - How might `coord_fixed()` and `geom_abline()` improve a graphic?
+ - Feel free to be creative! It is your job to answer this question and interpret conclusions in the most appropriate ways you see fit.
+
+This dataset was provided by [Swipestats.io](https://www.swipestats.io/).
+
+::: {.callout-tip icon="false"}
+## Solution
+
+![Messages Sent Boxplot](image/messages_sent_boxplot_clean.png)
+
+![Messages Sent Density Plot](image/messages_sent_densityplot_clean.png)
+
+![Messages Received Boxplot](image/messages_received_boxplot_clean.png)
+
+![Messages Received Density Plot](image/messages_received_density_plot_clean.png)
+
+![Gender Plot](image/genderbarplot.png)
+
+![Relationship between Messages Sent and Messages Received](image/received_vs_sent.png)
+
+![Relationship between Messages Sent and Messages Received by Gender](image/received_vs_sent_m_f.png)
+
+![Relationship between Messages Sent and Messages Received Male Users](image/received_vs_sent_m.png)
+![Relationship between Messages Sent and Messages Received Female Users](image/received_vs_sent_f.png)
+
+![Relationship between Messages Sent and Messages Received LGBT+ Users](image/received_vs_sent_lgbt.png)
+
+![Relationship between Messages Sent and Messages Received Female LGBT+ Users](image/received_vs_sent_lgbt_f.png)
+![Relationship between Messages Sent and Messages Received Male LGBT+ Users](image/received_vs_sent_lgbt_m.png)
+
+
+Upon initial inspection of the relationship between gender and messages sent and received on Tinder, we see that there are 1077 users in this data set. Most of these users identify as male. The distributions of messages sent and messages received both see heavy skew to the right, with approximately 75% of users sending less than 500 messages and receiving less than 500 messages. The median number of messages sent is 352 messages and the median number of messages received is 324. There are some users that send and receive a larger number of messages, to the point where they are considered outliers. These outliers could potentially skew the overall data, confirmed by the values of the means for messages received and sent being 1531 and 1607 respectively. The most messages received was 55608 and the most messages sent was 61881. Further analysis was conducted to examine *who* was sending/receiving these messages and how patterns of communication differed by gender. In examining the relationship between messages received and sent, it is clear that there is a positive linear relationship between the two. In general, the more messages sent was correlated with more messages received. This makes logical sense, as more messages sent are more likely to receive more messages back and vice versa. Further investigation into this relationship and gender of the user showed that . However, there is a large imbalance in the number of women vs. men, so this trend could be a fault of a limited dataset. Additional investigation into non-heterosexual users messaging activity was also conducted. Typical patterns for messaging activity remained, i.e. more messages sent indicates more messages received. However, the ratio of messages sent to messages received was less for LGBT+ men than it was for LGBT+ women. Additional research should be done to investigate these relationships. More data on LGBT+ messaging patterns could be particularly interesting. Users who answered "NA" for gender also might have valuable information, as the survey lacked an option for nonbinary, however there were not many users who answered "NA". 
+
+
+:::
