@@ -1,0 +1,72 @@
+---
+title: "L00 Setup"
+subtitle: "Data Science 1 with R (STAT 301-1)"
+author: "Allison Kane"
+
+format:
+  html:
+    toc: true
+    embed-resources: true
+    link-external-newwindow: true
+
+execute:
+  warning: false
+
+from: markdown+emoji 
+---
+
+## Github Repo Link
+
+<https://github.com/stat301-1-2023-fall/L00-setup-akane2460>
+
+## Tasks
+
+Complete the following tasks. For each task you'll need to simply **indicate that you have completed the task**.
+
+### Task 1 :white_check_mark:
+
+### Task 2 :white_check_mark:
+
+### Task 3 :white_check_mark:
+
+### Task 4 :white_check_mark:
+
+### Task 5 :white_check_mark:.
+
+### Task 6 (optional)
+
+It is always handy to have a versatile text editor and I would suggest downloading [Sublime Text](https://www.sublimetext.com/). It is free to use.
+
+## Exercises
+
+### Exercise 1 :white_check_mark:
+
+Suppose a random variable $X$ has finite variance, then as we take larger random samples (i.e. as $n$ increases) we have that $$\bar{X} \sim N\left(\mu_{\bar{X}}=\mu_X, \sigma^2_{\bar{X}} = \frac{\sigma_X^2}{n}\right)$$ This is an informal statement of which important statistical theorem?
+
+::: {.callout-tip icon="false"}
+## Solution
+
+Central Limit Theorem
+
+:::
+
+
+### Exercise 2 :white_check_mark:
+
+Create a code chunk and assign the value 5 to `x` and the value 3 to `y`. Then print `x * y`.
+
+::: {.callout-tip icon="false"}
+## Solution
+
+```{r}
+
+x <- 5
+y <- 3
+
+x * y
+
+```
+
+
+:::
+
